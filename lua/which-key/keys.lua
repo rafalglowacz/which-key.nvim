@@ -22,14 +22,14 @@ function M.setup()
   for op, label in pairs(Config.options.operators) do
     M.operators[op] = true
     if builtin_ops[op] then
-      mappings[op] = { name = label, i = { name = "inside" }, a = { name = "around" } }
+      mappings[op] = { name = label, h = { name = "inside" }, a = { name = "around" } }
     end
   end
   for _, t in pairs(Config.options.triggers_nowait) do
     M.nowait[t] = true
   end
   M.register(mappings, { mode = "n", preset = true })
-  M.register({ i = { name = "inside" }, a = { name = "around" } }, { mode = "v", preset = true })
+  M.register({ h = { name = "inside" }, a = { name = "around" } }, { mode = "v", preset = true })
   for mode, blacklist in pairs(Config.options.triggers_blacklist) do
     for _, prefix_n in ipairs(blacklist) do
       M.blacklist[mode] = M.blacklist[mode] or {}
@@ -254,8 +254,8 @@ function M.hook_add(prefix_n, mode, buf, secret_only)
   if tonumber(prefix_n) then
     return
   end
-  -- don't hook to j or k in INSERT mode
-  if mode == "i" and (prefix_n == "j" or prefix_n == "k") then
+  -- don't hook to i or k in INSERT mode
+  if mode == "i" and (prefix_n == "i" or prefix_n == "k") then
     return
   end
   -- never hook q
@@ -275,7 +275,7 @@ function M.hook_add(prefix_n, mode, buf, secret_only)
     return
   end
   -- never hook into operators in visual mode
-  if (mode == "v" or mode == "x") and (prefix_n == "a" or prefix_n == "i" or M.operators[prefix_n]) then
+  if (mode == "v" or mode == "x") and (prefix_n == "a" or prefix_n == "h" or M.operators[prefix_n]) then
     return
   end
 
